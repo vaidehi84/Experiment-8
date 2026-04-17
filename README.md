@@ -1,123 +1,175 @@
-# 🔐 Experiment 8 — JWT Frontend Integration
-### *Secure. Stateless. Role-Aware. Now with a UI.*
+# 🔐 Experiment 8 — Frontend Integration with JWT APIs
+### *Session-Based Authentication UI using React + Spring Boot*
 
-![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=java) ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.2.3-green?style=for-the-badge&logo=springboot) ![React](https://img.shields.io/badge/React-18.2.0-blue?style=for-the-badge&logo=react) ![JWT](https://img.shields.io/badge/JWT-Secured-purple?style=for-the-badge&logo=jsonwebtokens) ![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-blueviolet?style=for-the-badge&logo=bootstrap)
+![React](https://img.shields.io/badge/React-18.2.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.2.3-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-Secured-purple?style=for-the-badge&logo=jsonwebtokens)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
+![MUI](https://img.shields.io/badge/Material_UI-5.x-007FFF?style=for-the-badge&logo=mui&logoColor=white)
+![Axios](https://img.shields.io/badge/Axios-1.6.x-5A29E4?style=for-the-badge&logo=axios)
+
+> 🧪 **Based on Experiment 6** — Uses the Spring Boot JWT backend (login + protected routes)
 
 ---
 
-## 📌 What is this?
+## 🎯 Objective
 
-A **full-stack web application** combining a JWT-secured **Spring Boot backend** (from Exp 7) with a brand-new **React frontend**. Users log in through a real UI, receive a signed JWT stored in `sessionStorage`, and navigate to a protected dashboard — with automatic redirects and 401/403 handling.
+- Build a **React frontend UI** that consumes JWT-secured APIs
+- Implement **session-based authentication** (token stored in `sessionStorage`)
+- Restrict access to pages based on **login state**
+- Demonstrate tested endpoints from the frontend UI
 
 ---
 
 ## ✨ Features
 
-* 👑 **ADMIN role** — full access including admin-only endpoints
-* 👤 **USER role** — restricted to user-level endpoints only
-* 🎨 **React Login UI** — clean form with MUI + Bootstrap styling
-* 🔑 **JWT stored in sessionStorage** — no cookies, no server sessions
-* 🛡️ **Protected dashboard** — auto-redirects if token is missing
-* 🚪 **Logout** — clears token and redirects to login
-* ⚡ **Stateless** — zero server-side sessions
-* 🔒 **401 / 403 handled** in the UI with error alerts
+| Feature | Description |
+|---|---|
+| 🔑 Login Page | Calls `POST /login`, stores JWT in `sessionStorage` |
+| 🛡️ Protected Dashboard | Only accessible when JWT exists in session |
+| 📡 Fetch Data | Calls `GET /protected` with Bearer token in header |
+| 🚪 Logout | Clears `sessionStorage` and redirects to login |
+| 🔀 Route Guard | Auto-redirects unauthenticated users to login |
+| ⚡ Stateless | Zero server-side sessions — token lives in browser |
 
 ---
 
-## ⚙️ Tech Stack
-
-### ☕ Backend
-| Technology | Version | Role |
-|---|---|---|
-| Java | 17 | Core language |
-| Spring Boot | 3.2.3 | Backend framework |
-| Spring Security | 6.2.2 | Auth & authorization |
-| JWT (jjwt) | 0.11.5 | Token generation & validation |
-| Maven | 3.9.x | Build tool |
+## 💻 Tech Stack
 
 ### 🎨 Frontend
 | Technology | Version | Role |
 |---|---|---|
-| React | 18.2.0 | UI framework |
-| React Router DOM | 6.x | Client-side routing |
-| Axios | 1.6.x | HTTP requests |
-| Bootstrap | 5.3.x | Responsive layout |
-| Material UI (MUI) | 5.x | Component library |
+| React | 18.2.0 | UI Framework |
+| Bootstrap | 5.3.x | Layout & Styling |
+| Material UI (MUI) | 5.x | UI Components |
+| Axios | 1.6.x | API Calls |
+
+### ☕ Backend (Experiment 6)
+| Technology | Version | Role |
+|---|---|---|
+| Java | 17 | Core language |
+| Spring Boot | 3.2.3 | Backend Framework |
+| Spring Security | 6.2.2 | Auth & Authorization |
+| JWT (jjwt) | 0.11.5 | Token Generation |
 
 ---
 
 ## 📁 Project Structure
-Vaidehi_Exp8/
-├── 🎨 frontend/
-│   ├── public/
-│   │   └── index.html
-│   └── src/
-│       ├── components/
-│       │   ├── Login.js        ← Login form (MUI + Bootstrap)
-│       │   └── Dashboard.js    ← Protected dashboard page
-│       ├── App.js              ← React Router setup
-│       └── index.js            ← Entry point
-├── ☕ src/main/java/com/example/jwt_demo/
-│   ├── controllers/
-│   │   ├── AuthController.java
-│   │   ├── AdminController.java
-│   │   └── UserController.java
-│   ├── security/
-│   │   ├── JwtUtil.java
-│   │   ├── JwtFilter.java
-│   │   ├── SecurityConfig.java
-│   │   └── TokenBlacklist.java
-│   └── JwtDemoApplication.java
-├── 📸 screenshots/
-├── pom.xml
-└── README.md
+frontend/
+├── src/
+│   ├── components/
+│   │   ├── Login.js        ← Login form (Bootstrap + MUI)
+│   │   └── Dashboard.js    ← Protected page with token check
+│   ├── App.js              ← React Router setup
+│   └── index.js            ← Bootstrap CSS import
 
 ---
 
-## 👥 Users & Credentials
+## ⚙️ Installation & Setup
 
-| Username | Password | Role | Access |
-|---|---|---|---|
-| `admin` | `admin123` | 👑 ADMIN | All endpoints |
-| `vaidehi` | `user123` | 👤 USER | `/user/**` only |
-
----
-
-## 📡 API Reference
-
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `POST` | `/login` | None | Authenticate → receive JWT |
-| `POST` | `/logout` | Bearer | Blacklist & invalidate token |
-| `GET` | `/admin/dashboard` | 👑 ADMIN | Admin dashboard |
-| `GET` | `/admin/users` | 👑 ADMIN | List all users |
-| `GET` | `/user/profile` | 👤 USER or ADMIN | User profile |
-| `GET` | `/user/dashboard` | 👤 USER or ADMIN | User dashboard |
-
----
-
-## 🚀 Getting Started
-
-### 1️⃣ Clone & Start Backend
+### 1️⃣ Create React App & Install Dependencies
 ```bash
-git clone https://github.com/vaidehi84/Experiment-8.git
-cd Experiment-8
+npx create-react-app frontend
+cd frontend
+npm install axios bootstrap @mui/material @emotion/react @emotion/styled
+```
+
+### 2️⃣ Add Bootstrap in `index.js`
+```js
+import 'bootstrap/dist/css/bootstrap.min.css';
+```
+
+### 3️⃣ Start Backend (Spring Boot)
+```bash
 mvn spring-boot:run
 ```
-> 🌐 Backend runs at `http://localhost:8083`
+> 🌐 Runs at `http://localhost:8083`
 
-### 2️⃣ Start React Frontend
+### 4️⃣ Start Frontend
 ```bash
-cd frontend
-npm install
 npm start
 ```
-> 🌐 Frontend runs at `http://localhost:3000`
+> 🌐 Runs at `http://localhost:3000`
+
+---
+
+## 🧱 React Implementation
+
+### 📄 Login.js
+```jsx
+import React, { useState } from "react";
+import axios from "axios";
+
+function Login() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const login = async () => {
+    const res = await axios.post("http://localhost:8083/login", {
+      username,
+      password
+    });
+    if (res.data.token) {
+      sessionStorage.setItem("token", res.data.token);
+      window.location.href = "/dashboard";
+    }
+  };
+
+  return (
+    <div className="container mt-5">
+      <h2>Login</h2>
+      <input className="form-control" onChange={(e) => setUsername(e.target.value)} placeholder="Username" /><br/>
+      <input className="form-control" type="password" onChange={(e) => setPassword(e.target.value)} placeholder="Password" /><br/>
+      <button className="btn btn-primary" onClick={login}>Login</button>
+    </div>
+  );
+}
+
+export default Login;
+```
+
+### 📄 Dashboard.js
+```jsx
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+
+function Dashboard() {
+  const [data, setData] = useState("");
+  const token = sessionStorage.getItem("token");
+
+  useEffect(() => {
+    if (!token) window.location.href = "/";
+  }, []);
+
+  const getData = async () => {
+    const res = await axios.get("http://localhost:8083/protected", {
+      headers: { Authorization: "Bearer " + token }
+    });
+    setData(res.data);
+  };
+
+  const logout = () => {
+    sessionStorage.removeItem("token");
+    window.location.href = "/";
+  };
+
+  return (
+    <div className="container mt-5">
+      <h2>Dashboard</h2>
+      <button className="btn btn-success me-2" onClick={getData}>Fetch Data</button>
+      <button className="btn btn-danger" onClick={logout}>Logout</button>
+      <p>{data}</p>
+    </div>
+  );
+}
+
+export default Dashboard;
+```
 
 ---
 
 ## 🔄 Authentication Flow
-User enters credentials on Login.js
+User enters Username & Password
 ↓
 POST /login → JWT returned
 ↓
@@ -125,10 +177,13 @@ sessionStorage.setItem("token", jwt)
 ↓
 Redirect to /dashboard
 ↓
-Dashboard reads token → GET /protected
-with Authorization: Bearer <token>
+useEffect checks token exists?
+✅ Yes → Show dashboard
+❌ No  → Redirect to /
 ↓
-Backend validates → Data displayed
+GET /protected → Bearer <token>
+↓
+Data displayed on UI
 ↓
 Logout → sessionStorage.clear()
 ↓
@@ -136,28 +191,68 @@ Redirect to /login
 
 ---
 
+## 🔐 Session-Based Route Protection
+
+```js
+// Allow dashboard only if token exists
+useEffect(() => {
+  if (!sessionStorage.getItem("token"))
+    window.location.href = "/";   // Redirect to login
+}, []);
+```
+
+```js
+// Call protected API with token
+headers: { Authorization: "Bearer " + token }
+```
+
+```js
+// Logout — clear session
+sessionStorage.removeItem("token");
+```
+
+---
+
 ## 📸 Screenshots
 
-### 1️⃣ Admin Login — 200 OK ✅
-![Admin Login](screenshots/1_login_admin_success.png)
-
-### 2️⃣ Admin Dashboard — Token in DevTools ✅
-![Admin Dashboard](screenshots/2_admin_dashboard_success.png)
-
-### 3️⃣ User Login — 200 OK ✅
-![User Login](screenshots/3_login_user_success.png)
-
-### 4️⃣ User Profile — Protected Data ✅
-![User Profile](screenshots/4_user_profile_success.png)
-
-### 5️⃣ USER Denied Admin Route — 403 Forbidden ❌
-![Access Denied](screenshots/5_user_denied_admin.png)
-
-### 6️⃣ No Token — 401 Unauthorized ❌
-![401 Error](screenshots/6_no_token_401.png)
-
-### 7️⃣ Invalid Credentials — Error Alert ❌
-![Invalid Login](screenshots/7_invalid_login.png)
+<table>
+  <tr>
+    <td align="center">
+      <b>1️⃣ Login from React UI ✅</b><br/><br/>
+      <img src="screenshots/1_login_admin_success.png" width="420"/>
+    </td>
+    <td align="center">
+      <b>2️⃣ Token in sessionStorage (DevTools) ✅</b><br/><br/>
+      <img src="screenshots/2_admin_dashboard_success.png" width="420"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <b>3️⃣ User Login Success ✅</b><br/><br/>
+      <img src="screenshots/3_login_user_success.png" width="420"/>
+    </td>
+    <td align="center">
+      <b>4️⃣ Protected Data on Dashboard ✅</b><br/><br/>
+      <img src="screenshots/4_user_profile_success.png" width="420"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <b>5️⃣ Unauthorized Access → Redirect ❌</b><br/><br/>
+      <img src="screenshots/5_user_denied_admin.png" width="420"/>
+    </td>
+    <td align="center">
+      <b>6️⃣ No Token — 401 Unauthorized ❌</b><br/><br/>
+      <img src="screenshots/6_no_token_401.png" width="420"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" colspan="2">
+      <b>7️⃣ Logout Functionality ✅</b><br/><br/>
+      <img src="screenshots/7_invalid_login.png" width="420"/>
+    </td>
+  </tr>
+</table>
 
 ---
 
@@ -165,49 +260,11 @@ Redirect to /login
 
 | Concept | How it works |
 |---|---|
-| 🔑 Token Generation | HS256 signed JWT with role claim, 1hr expiry |
-| 🛡️ Token Validation | `JwtFilter` intercepts every request |
-| 👑 Role Enforcement | Spring Security `hasRole` on URL patterns |
-| 🚫 Token Blacklisting | In-memory `HashSet` on logout |
-| ⚡ Stateless Auth | No server-side sessions |
-| 🎨 Frontend Auth | `sessionStorage` + Axios Bearer header |
-| 🔀 Route Protection | `useEffect` redirects if no token found |
+| 🔑 JWT Login | `POST /login` returns signed token |
+| 💾 Token Storage | `sessionStorage` — cleared on tab close |
+| 🛡️ Route Guard | `useEffect` checks token on every load |
+| 📡 API Call | Axios with `Authorization: Bearer <token>` |
+| 🚪 Logout | `sessionStorage.removeItem("token")` |
+| ⚡ Stateless | No server sessions — frontend manages state |
 
 ---
-
-## 💡 Key Code Snippets
-
-**Store token after login:**
-```js
-sessionStorage.setItem("token", res.data.token);
-```
-
-**Call protected API with token:**
-```js
-axios.get("http://localhost:8083/protected", {
-  headers: { Authorization: "Bearer " + token }
-});
-```
-
-**Protect frontend routes:**
-```js
-useEffect(() => {
-  if (!sessionStorage.getItem("token"))
-    window.location.href = "/";
-}, []);
-```
-
----
-
-> 📝 *Part of FullStack Development 2026 Lab Series | Built by Vaidehi Sharma*
-
-📋 How to use this:
-
-Open your project folder
-Delete the old README.md
-Create a new README.md and paste everything above
-Then push:
-
-bashgit add README.md
-git commit -m "Update README with screenshots and full docs"
-git push
